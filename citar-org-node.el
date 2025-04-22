@@ -61,14 +61,17 @@
   :prefix "citar-org-node-"
   :group 'org)
 
-;; TODO 2025-03-24: More specific explanation for what templates and fields are,
-;; and how to tell which fields are available and what they expand to?
-(defcustom citar-org-node-new-node-title-template "${title} by ${author}"
+(defcustom citar-org-node-new-node-title-template (cdr (assoc 'note citar-templates))
   "The citar formatting template for titles of newly created nodes.
 
-For an example of what this string should look like and the possible
-fields, see `citar-templates'.  Configuring this variable also allows
-citar to expand more fields, corresponding to bibliography file fields.
+The default value of this option is the value of the \"note\" template
+in `citar-templates'.  See `citar-templates'for an example of what this
+string should look like.
+
+Citar fields (which correspond to bibliography file fields) can also be
+included in the value of this option.  For example, \"${title}\" will
+expand to the value of the \"title\" field in corresponding
+bibliographic entry of the bibliographic (.bib) file.
 
 See also `citar-org-node-fallback-org-capture-template-key'."
   :type 'string)
