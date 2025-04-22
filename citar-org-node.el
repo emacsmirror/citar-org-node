@@ -61,7 +61,8 @@
   :prefix "citar-org-node-"
   :group 'org)
 
-(defcustom citar-org-node-new-node-title-template (cdr (assoc 'note citar-templates))
+(defcustom citar-org-node-new-node-title-template
+  (or (cdr (assq 'note citar-templates)) "${title} by ${author}")
   "The citar formatting template for titles of newly created nodes.
 
 The default value of this option is the value of the \"note\" template
