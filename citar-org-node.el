@@ -5,7 +5,7 @@
 ;; Author: Kristoffer Balintona <krisbalintona@gmail.com>
 ;; URL: https://github.com/krisbalintona/citar-org-node
 ;; Keywords: tools
-;; Package-Version: 0.2.4
+;; Package-Version: 0.2.5
 ;; Package-Requires: ((emacs "26.1") (citar "1.1") (org-node "2.0.0") (ht "1.6"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -312,6 +312,7 @@ call `citar-open' on instead."
 
 Register the citar-org-node notes source backend using
 `citar-register-notes-source' and setting `citar-notes-source'."
+  (org-node-cache-ensure)     ; Ensure org-node is loaded and its cache is ready
   (citar-register-notes-source 'citar-org-node citar-org-node-notes-config)
   (setq citar-notes-source 'citar-org-node))
 
