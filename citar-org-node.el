@@ -6,7 +6,7 @@
 ;; URL: https://github.com/krisbalintona/citar-org-node
 ;; Keywords: tools
 ;; Package-Version: 0.2.5
-;; Package-Requires: ((emacs "26.1") (citar "1.1") (org-node "2.0.0") (ht "1.6"))
+;; Package-Requires: ((emacs "26.1") (citar "1.1") (org-node "3.0.0") (ht "1.6"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ keys are in this list will be included in the final hash table."
                     ;; is not identical to a citekey of ours.  This should be
                     ;; possible, though unlikely.
                     (not ref-type)))
-             org-node--ref-path<>ref-type))
+             org-mem--roam-ref<>type))
 
 (defun citar-org-node--get-candidates (&optional citekeys)
   "Return hash table mapping of CITEKEYS to completion candidates.
@@ -149,9 +149,9 @@ See also `citar-org-node-notes-config'."
                              ;; 2025-04-02: There is no org-node alias for
                              ;; `indexed-roam--ref<>id'; is it a mistake to use
                              ;; an indexed-specific variable?
-                             (let* ((id (gethash (concat "@" ref-path) indexed-roam--ref<>id))
-                                    (node (org-node-by-id id))
-                                    (title (org-node-get-title node)))
+                             (let* ((id (gethash (concat "@" ref-path) org-mem--roam-ref<>id))
+                                    (node (org-mem-entry-by-id id))
+                                    (title (org-mem-entry-title node)))
                                ;; Final list elements are:
                                (list id ref-path title)))
                            (citar-org-node--get-citekey-refs citekeys)))
@@ -192,7 +192,7 @@ See also `citar-org-node-notes-config'."
   ;; first space
   (let ((id (substring-no-properties
              (car (split-string candidate-string)))))
-    (org-node--goto (org-node-by-id id))))
+    (org-node--goto (org-mem-entry-by-id id))))
 
 (defun citar-org-node--available-org-capture-key ()
   "Returns a key available for being bound in the `org-capture' menu.
@@ -304,7 +304,7 @@ call `citar-open' on instead."
   (if-let* ((citar-open-prompt t)
             (node (org-node-at-point))
             (refs (mapcar (lambda (s) (string-remove-prefix "@" s))
-                          (org-node-get-refs node))))
+                          (org-mem-roam-refs node))))
       (citar-open (if prefix
                       (citar-select-refs :filter (lambda (key) (member key refs)))
                     refs))
