@@ -1,0 +1,9 @@
+#+title: NEWS
+
+* Unreleased
+
+* 0.2.6
+
+** Changes
+
++ Become compatible with org-node v3.
