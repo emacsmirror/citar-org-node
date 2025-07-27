@@ -107,28 +107,31 @@ See `citar-notes-sources' for more details on configuration keys.")
 (defun citar-org-node--get-citekey-refs (&optional citekeys)
   "Return `org-node--ref-path<>ref-type' with only citekeys.
 
-`org-node--ref-path<>ref-type' stores refs of any type (e.g., citekeys,
-https).  This function removes (non-destructively) non-citekey pairs
-from the hash table, returning the resulting hash table.
+This function removes (non-destructively) non-citekey pairs from the
+`org-node--ref-path<>ref-type' hash table (which stores refs of any
+type, e.g., citekeys,https), returning the transformed hash table.
 
 The optional argument CITEKEYS should be a list of org-node
 ref-paths (i.e. citekeys).  If non-nil, only the keys-value pairs whose
-keys are in this list will be included in the final hash table."
+keys are in this list will be included in the returned hash table.  If
+nil, include all citekeys in the returned hash table."
   (when (and citekeys (not (listp citekeys)))
     (error "CITEKEYS should be a list"))
   (ht-select (lambda (ref-path ref-type)
-               ;; 2025-04-02: Org-node v3 changed the ref-path and ref-type
-               ;; format of citations in `org-node--ref-path<>ref-type'.
-               ;; Formally, the ref-path would be the citekey and the ref-type
-               ;; would be the citekey prepended with a "@".  As of writing
-               ;; this, the ref-path is unchanged (citekeys) but the ref-type is
-               ;; now nil for citations.
-               (and (member ref-path citekeys)
-                    ;; 2025-04-02: Currently, the ref-type of citations is nil.
-                    ;; This clause ensures that the ref-path of a non-citation
-                    ;; is not identical to a citekey of ours.  This should be
-                    ;; possible, though unlikely.
-                    (not ref-type)))
+               ;; 2025-04-02: Org-node v3 changed the ref-path and
+               ;; ref-type format of citations in
+               ;; `org-node--ref-path<>ref-type'.  Formally, the
+               ;; ref-path would be the citekey and the ref-type would
+               ;; be the citekey prepended with a "@".  As of writing
+               ;; this, the ref-path is unchanged (citekeys) but the
+               ;; ref-type is now nil for citations.
+               ;; 2025-04-02: Currently, the ref-type of citations is
+               ;; nil.  This clause ensures that the ref-path of a
+               ;; non-citation is not identical to a citekey of ours.
+               ;; This should be possible, though unlikely.
+               (if citekeys
+                   (and (not ref-type) (member ref-path citekeys))
+                 (not ref-type)))
              org-mem--roam-ref<>type))
 
 (defun citar-org-node--get-candidates (&optional citekeys)

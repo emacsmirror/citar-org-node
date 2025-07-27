@@ -2,6 +2,8 @@
 
 * Unreleased
 
++ Fix the bibliographic entries citar recognizes as having notes. This effects commands like ~citar-open~.
+
 * 0.2.6
 
 ** Changes
